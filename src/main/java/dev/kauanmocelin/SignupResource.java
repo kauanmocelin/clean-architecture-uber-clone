@@ -3,9 +3,7 @@ package dev.kauanmocelin;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -18,15 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Path("/signup")
+@Path("/api")
 public class SignupResource {
 
     @Inject
     DataSource datasource;
 
     @POST
+	@Path("/signup")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response signup(SignupRequestInput signupRequestInput) {
+    public Response signup(SignupRequestInput signupRequestInput) throws SQLException {
 		var result = "";
 
 		List<SignupDatabase> signupsByEmailDatabase = new ArrayList<>();
@@ -100,12 +99,35 @@ public class SignupResource {
 				// already exists
 				result = String.valueOf(-4);
 			}
-		} catch (SQLException e) {
 		}
 		if(result.matches("-?\\d+")) {
 			return Response.status(422).entity(result).build();
 		} else {
 			return Response.ok().entity(result).build();
 		}
+    }
+
+	@GET
+	@Path("/accounts/{accountId}")
+	public Response getAccounts(@PathParam("accountId") final UUID accountId) throws SQLException {
+		SignupDatabase signupDatabase = null;
+		try (Connection con = datasource.getConnection()){
+			PreparedStatement ps = con.prepareStatement("select * from uber_clone.account where account_id = ?");
+			ps.setObject(1, accountId);
+			try (ResultSet rs = ps.executeQuery();) {
+				while (rs.next()) {
+					signupDatabase = new SignupDatabase(
+							rs.getString("account_id"),
+							rs.getString("name"),
+							rs.getString("email"),
+							rs.getString("cpf"),
+							rs.getString("car_plate"),
+							rs.getBoolean("is_passenger"),
+							rs.getBoolean("is_driver")
+					);
+				}
+			}
+		}
+		return Response.ok().entity(signupDatabase).build();
     }
 }
