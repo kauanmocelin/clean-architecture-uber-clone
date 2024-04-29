@@ -1,6 +1,6 @@
 package dev.kauanmocelin;
 
-public record SignupDatabase(
+public record SignupDatabaseDTO(
 		String account_id,
 		String name,
 		String email,
