@@ -89,4 +89,85 @@ class SignupApiTest {
                 .statusCode(422)
                 .body(equalTo("-3"));
     }
+
+    @Test
+    void shouldNotCreateAnAccountToPassengerWhenEmailIsInvalid() {
+        final SignupRequestInputDTO signupRequestInputDTO = new SignupRequestInputDTO(
+                "John Doe",
+                "johndoe"+Math.random(),
+                "26123453025",
+                "",
+                true,
+                false);
+        given()
+                .contentType(ContentType.JSON)
+                .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
+                .when()
+                .post("/api/signup")
+                .then()
+                .statusCode(422)
+                .body(equalTo("-2"));
+    }
+
+    @Test
+    void shouldNotCreateAnAccountToPassengerWhenCpfIsInvalid() {
+        final SignupRequestInputDTO signupRequestInputDTO = new SignupRequestInputDTO(
+                "John Doe",
+                "johndoe"+Math.random()+"@gmaill.com",
+                "2612345",
+                "",
+                true,
+                false);
+        given()
+                .contentType(ContentType.JSON)
+                .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
+                .when()
+                .post("/api/signup")
+                .then()
+                .statusCode(422)
+                .body(equalTo("-1"));
+    }
+
+    @Test
+    void shouldNotCreateAnAccountToDriverWhenCarPlateIsInvalid() {
+        final SignupRequestInputDTO signupRequestInputDTO = new SignupRequestInputDTO(
+                "John Doe",
+                "johndoe"+Math.random()+"@gmaill.com",
+                "26123453025",
+                "AAA55",
+                false,
+                true);
+        given()
+                .contentType(ContentType.JSON)
+                .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
+                .when()
+                .post("/api/signup")
+                .then()
+                .statusCode(422)
+                .body(equalTo("-5"));
+    }
+
+    @Test
+    void shouldNotCreateAnAccountToPassengerWhenEmailAlreadyExists() {
+        final SignupRequestInputDTO signupRequestInputDTO = new SignupRequestInputDTO(
+                "John Doe",
+                "johndoe"+Math.random()+"@gmaill.com",
+                "26123453025",
+                "",
+                true,
+                false);
+        given()
+                .contentType(ContentType.JSON)
+                .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
+                .when()
+                .post("/api/signup");
+        given()
+                .contentType(ContentType.JSON)
+                .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
+                .when()
+                .post("/api/signup")
+                .then()
+                .statusCode(422)
+                .body(equalTo("-4"));
+    }
 }
