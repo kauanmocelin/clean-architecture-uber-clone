@@ -1,6 +1,7 @@
 package dev.kauanmocelin;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -21,11 +22,15 @@ public class SignupApi {
     @Path("/signup")
     @Produces(MediaType.APPLICATION_JSON)
     public Response signup(SignupRequestInputDTO signupRequestInputDTO) {
-        var result = signupApplication.signup(signupRequestInputDTO);
-        if (result.matches("-?\\d+")) {
-            return Response.status(422).entity(result).build();
-        } else {
+        try {
+            var result = signupApplication.signup(signupRequestInputDTO);
             return Response.ok().entity(result).build();
+        } catch(RuntimeException rte) {
+            String messageError = Json.createObjectBuilder()
+                    .add("message", rte.getMessage())
+                    .build()
+                    .toString();
+            return Response.status(422).entity(messageError).build();
         }
     }
 

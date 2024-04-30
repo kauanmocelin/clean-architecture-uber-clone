@@ -4,12 +4,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.core.Response;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
 class SignupApiTest {
@@ -35,9 +35,9 @@ class SignupApiTest {
                 .get("/api/accounts/{accountId}")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .body("name", equalTo(signupRequestInputDTO.getName()))
-                .body("email", equalTo(signupRequestInputDTO.getEmail()))
-                .body("cpf", equalTo(signupRequestInputDTO.getCpf()));
+                .body("name", is(signupRequestInputDTO.getName()))
+                .body("email", is(signupRequestInputDTO.getEmail()))
+                .body("cpf", is(signupRequestInputDTO.getCpf()));
     }
 
     @Test
@@ -65,10 +65,10 @@ class SignupApiTest {
                 .get("/api/accounts/{accountId}")
                 .then()
                 .statusCode(Response.Status.OK.getStatusCode())
-                .body("name", equalTo( signupRequestInputDTO.getName()))
-                .body("email", equalTo( signupRequestInputDTO.getEmail()))
-                .body("cpf", equalTo( signupRequestInputDTO.getCpf()))
-                .body("car_plate", equalTo( signupRequestInputDTO.getCarPlate()));
+                .body("name", is( signupRequestInputDTO.getName()))
+                .body("email", is( signupRequestInputDTO.getEmail()))
+                .body("cpf", is( signupRequestInputDTO.getCpf()))
+                .body("car_plate", is( signupRequestInputDTO.getCarPlate()));
     }
 
     @Test
@@ -87,7 +87,7 @@ class SignupApiTest {
                 .post("/api/signup")
                 .then()
                 .statusCode(422)
-                .body(equalTo("-3"));
+                .body("message", is("Invalid name"));
     }
 
     @Test
@@ -106,7 +106,7 @@ class SignupApiTest {
                 .post("/api/signup")
                 .then()
                 .statusCode(422)
-                .body(equalTo("-2"));
+                .body("message", is("Invalid email"));
     }
 
     @Test
@@ -125,7 +125,7 @@ class SignupApiTest {
                 .post("/api/signup")
                 .then()
                 .statusCode(422)
-                .body(equalTo("-1"));
+                .body("message", is("Invalid cpf"));
     }
 
     @Test
@@ -144,7 +144,7 @@ class SignupApiTest {
                 .post("/api/signup")
                 .then()
                 .statusCode(422)
-                .body(equalTo("-5"));
+                .body("message", is("Invalid car plate"));
     }
 
     @Test
@@ -168,6 +168,6 @@ class SignupApiTest {
                 .post("/api/signup")
                 .then()
                 .statusCode(422)
-                .body(equalTo("-4"));
+                .body("message", is("Account already exists"));
     }
 }

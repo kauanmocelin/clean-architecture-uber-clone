@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @QuarkusTest
 class SignupApplicationTest {
@@ -62,7 +63,8 @@ class SignupApplicationTest {
                 "AAA9999",
                 true,
                 false);
-        String outputSignup = signupApplication.signup(signupRequestInputDTO);
-        assertThat(outputSignup).isEqualTo("-3");
+        assertThatThrownBy(() -> signupApplication.signup(signupRequestInputDTO))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Invalid name");
     }
 }

@@ -19,11 +19,11 @@ public class SignupApplication {
 	public String signup(SignupRequestInputDTO signupRequestInputDTO) {
 		signupRequestInputDTO.setUuid(UUID.randomUUID());
 		SignupDatabaseDTO existingAccount = signupResource.getAccountByEmail(signupRequestInputDTO.getEmail());
-		if(existingAccount != null) return String.valueOf(-4); // already exists
-		if(!signupRequestInputDTO.getName().matches("[a-zA-Z]+\\s[a-zA-Z]+")) return String.valueOf(-3); // invalid name
-		if(!signupRequestInputDTO.getEmail().matches("^(.+)@(.+)$")) return String.valueOf(-2); // invalid email
-		if(!new ValidateCpf().validate(signupRequestInputDTO.getCpf())) return String.valueOf(-1); // invalid cpf
-		if(signupRequestInputDTO.isDriver() && signupRequestInputDTO.getCarPlate() != null && !signupRequestInputDTO.getCarPlate().matches("[A-Z]{3}[0-9]{4}")) return String.valueOf(-5);
+		if(existingAccount != null) throw new IllegalArgumentException("Account already exists");
+		if(!signupRequestInputDTO.getName().matches("[a-zA-Z]+\\s[a-zA-Z]+")) throw new IllegalArgumentException("Invalid name");
+		if(!signupRequestInputDTO.getEmail().matches("^(.+)@(.+)$")) throw new IllegalArgumentException("Invalid email");
+		if(!new ValidateCpf().validate(signupRequestInputDTO.getCpf())) throw new IllegalArgumentException("Invalid cpf");
+		if(signupRequestInputDTO.isDriver() && signupRequestInputDTO.getCarPlate() != null && !signupRequestInputDTO.getCarPlate().matches("[A-Z]{3}[0-9]{4}")) throw new IllegalArgumentException("Invalid car plate");
 		signupResource.saveAccount(signupRequestInputDTO);
 		return Json.createObjectBuilder()
 			.add("accountId", signupRequestInputDTO.getUuid().toString())
