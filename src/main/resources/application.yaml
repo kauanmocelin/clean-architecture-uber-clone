@@ -3,4 +3,4 @@ quarkus:
     devservices:
       init-script-path: create.sql
   log:
-    level: ERROR
+    level: INFO
