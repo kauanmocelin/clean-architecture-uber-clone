@@ -1,21 +1,25 @@
-package dev.kauanmocelin;
+package dev.kauanmocelin.infra.http;
 
-import jakarta.inject.Inject;
+import dev.kauanmocelin.application.usecase.GetAccount;
+import dev.kauanmocelin.application.usecase.Signup;
+import dev.kauanmocelin.dto.SignupRequestInputDTO;
+import dev.kauanmocelin.infra.gateway.MailerGateway;
 import jakarta.json.Json;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.UUID;
-
 @Path("/api")
-public class SignupApi {
+public class AccountController {
 
-    SignupApplication signupApplication;
+    Signup signup;
+    GetAccount getAccount;
+    MailerGateway mailerGateway;
 
-    @Inject
-    public SignupApi(SignupApplication signupApplication) {
-        this.signupApplication = signupApplication;
+    public AccountController(Signup signup, MailerGateway mailerGateway, GetAccount getAccount) {
+        this.signup = signup;
+        this.mailerGateway = mailerGateway;
+        this.getAccount = getAccount;
     }
 
     @POST
@@ -23,7 +27,7 @@ public class SignupApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response signup(SignupRequestInputDTO signupRequestInputDTO) {
         try {
-            var result = signupApplication.signup(signupRequestInputDTO);
+            var result = signup.execute(signupRequestInputDTO);
             return Response.ok().entity(result).build();
         } catch(RuntimeException rte) {
             String messageError = Json.createObjectBuilder()
@@ -36,8 +40,8 @@ public class SignupApi {
 
     @GET
     @Path("/accounts/{accountId}")
-    public Response getAccounts(@PathParam("accountId") final UUID accountId) {
-        var account = signupApplication.getAccount(accountId);
+    public Response getAccounts(@PathParam("accountId") final String accountId) {
+        var account = getAccount.execute(accountId);
         return Response.ok().entity(account).build();
     }
 }

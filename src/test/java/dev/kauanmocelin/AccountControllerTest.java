@@ -1,18 +1,18 @@
 package dev.kauanmocelin;
 
+import dev.kauanmocelin.dto.SignupRequestInputDTO;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.core.Response;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 @QuarkusTest
-class SignupApiTest {
+class AccountControllerTest {
 
     @Test
     void shouldCreateAnAccountToPassenger() {
@@ -49,7 +49,7 @@ class SignupApiTest {
                 "AAA9999",
                 false,
                 true);
-        String outputSignupAccountId =  given()
+        String outputSignupAccountId = given()
                 .contentType(ContentType.JSON)
                 .body(JsonbBuilder.create().toJson(signupRequestInputDTO))
                 .when()
@@ -68,7 +68,7 @@ class SignupApiTest {
                 .body("name", is( signupRequestInputDTO.getName()))
                 .body("email", is( signupRequestInputDTO.getEmail()))
                 .body("cpf", is( signupRequestInputDTO.getCpf()))
-                .body("car_plate", is( signupRequestInputDTO.getCarPlate()));
+                .body("carPlate", is( signupRequestInputDTO.getCarPlate()));
     }
 
     @Test

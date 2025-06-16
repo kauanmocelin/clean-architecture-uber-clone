@@ -1,9 +1,6 @@
-package dev.kauanmocelin;
-
-import java.util.UUID;
+package dev.kauanmocelin.dto;
 
 public final class SignupRequestInputDTO {
-    private UUID uuid;
     private String name;
     private String email;
     private String cpf;
@@ -21,25 +18,6 @@ public final class SignupRequestInputDTO {
         this.carPlate = carPlate;
         this.isPassenger = isPassenger;
         this.isDriver = isDriver;
-    }
-
-    public SignupRequestInputDTO(UUID uuid, String name, String email, String cpf, String carPlate, boolean isPassenger, boolean isDriver) {
-        this.uuid = uuid;
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
-        this.carPlate = carPlate;
-        this.isPassenger = isPassenger;
-        this.isDriver = isDriver;
-    }
-
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public String getName() {

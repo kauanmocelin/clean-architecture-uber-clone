@@ -1,4 +1,4 @@
-package dev.kauanmocelin;
+package dev.kauanmocelin.dto;
 
 public record SignupDatabaseDTO(
 		String account_id,
