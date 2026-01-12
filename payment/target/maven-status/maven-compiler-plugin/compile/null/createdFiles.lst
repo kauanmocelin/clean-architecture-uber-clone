@@ -1,0 +1,5 @@
+dev/kauanmocelin/infra/database/DatabaseConnection.class
+dev/kauanmocelin/infra/database/PostgresqlAdapter.class
+dev/kauanmocelin/dto/InputProcessPayment.class
+dev/kauanmocelin/application/usecase/ProcessPayment.class
+dev/kauanmocelin/infra/http/PaymentController.class
