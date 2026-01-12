@@ -2,5 +2,17 @@ quarkus:
   datasource:
     devservices:
       init-script-path: create.sql
+  http:
+    port: 8080
+    test-port: 0
   log:
     level: INFO
+    category:
+      "org.jboss.resteasy.reactive.client.logging":
+        level: DEBUG
+  rest-client:
+    logging:
+      scope: request-response
+      body-limit: 1024
+    process-payment:
+      url: http://localhost:8081

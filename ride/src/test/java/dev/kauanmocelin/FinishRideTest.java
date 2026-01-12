@@ -1,5 +1,8 @@
 package dev.kauanmocelin;
 
+import dev.kauanmocelin.application.gateway.PaymentGateway;
+import dev.kauanmocelin.application.gateway.PaymentGatewayHttp;
+import dev.kauanmocelin.application.gateway.PaymentProcessorClient;
 import dev.kauanmocelin.application.usecase.*;
 import dev.kauanmocelin.dto.*;
 import dev.kauanmocelin.infra.database.DatabaseConnection;
@@ -7,6 +10,7 @@ import dev.kauanmocelin.infra.gateway.MailerGatewayMemory;
 import dev.kauanmocelin.infra.repository.*;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
@@ -21,6 +25,8 @@ class FinishRideTest {
     DatabaseConnection databaseConnection;
     @Inject
     DataSource dataSource;
+    @RestClient
+    PaymentProcessorClient paymentProcessorClient;
 
     @Test
     void shouldFinishARideWhenSuccessful() {
@@ -71,7 +77,8 @@ class FinishRideTest {
             BigDecimal.valueOf(-27.496887588317275),
             BigDecimal.valueOf(-48.522234807851476)));
 
-        FinishRide finishRide = new FinishRide(rideRepository);
+        PaymentGateway paymentGateway = new PaymentGatewayHttp(paymentProcessorClient);
+        FinishRide finishRide = new FinishRide(rideRepository, paymentGateway);
         InputFinishRide inputFinishRide = new InputFinishRide(outputRequestRide.rideId());
         finishRide.execute(inputFinishRide);
 
