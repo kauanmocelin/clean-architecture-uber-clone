@@ -20,9 +20,8 @@ public class Position {
         this.date = date;
     }
 
-    public static Position create(String rideId, BigDecimal latitude, BigDecimal longitude) {
+    public static Position create(String rideId, BigDecimal latitude, BigDecimal longitude, LocalDateTime dateTime) {
         final var positionId = UUID.randomUUID().toString();
-        final LocalDateTime dateTime = LocalDateTime.now();
         return new Position(positionId, rideId, new Coordinate(latitude, longitude), dateTime);
     }
 

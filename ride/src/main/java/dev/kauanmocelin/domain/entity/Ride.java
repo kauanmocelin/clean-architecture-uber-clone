@@ -1,5 +1,7 @@
 package dev.kauanmocelin.domain.entity;
 
+import com.aayushatharva.brotli4j.common.annotations.Local;
+import dev.kauanmocelin.domain.service.FareCalculatorFactory;
 import dev.kauanmocelin.domain.vo.Coordinate;
 import dev.kauanmocelin.domain.vo.RideStatus;
 import dev.kauanmocelin.domain.vo.RideStatusFactory;
@@ -105,15 +107,13 @@ public class Ride {
 
     public void finish() {
         this.status = status.finish();
-        this.fare = distance
-            .multiply(BigDecimal.valueOf(2.1))
-            .setScale(0, RoundingMode.HALF_UP);;
     }
 
-    public void updatePosition(BigDecimal latitude, BigDecimal longitude) {
+    public void updatePosition(BigDecimal latitude, BigDecimal longitude, LocalDateTime dateTime) {
         Coordinate newPosition = new Coordinate(latitude, longitude);
         BigDecimal distance = new Segment(lasPosition, newPosition).getDistance();
         this.distance = this.distance.add(distance);
+        this.fare = this.fare.add(FareCalculatorFactory.create(dateTime).calculate(distance));
         this.lasPosition = newPosition;
     }
 }

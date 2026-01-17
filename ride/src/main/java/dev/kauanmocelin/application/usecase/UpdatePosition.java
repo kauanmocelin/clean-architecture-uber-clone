@@ -18,9 +18,9 @@ public class UpdatePosition {
 
     public void execute(InputUpdatePosition inputUpdatePosition) {
         Ride ride = rideRepository.getRideById(inputUpdatePosition.rideId().toString());
-        ride.updatePosition(inputUpdatePosition.latitude(), inputUpdatePosition.longitude());
+        ride.updatePosition(inputUpdatePosition.latitude(), inputUpdatePosition.longitude(), inputUpdatePosition.dateTime());
         rideRepository.updateRide(ride);
-        final var position = Position.create(inputUpdatePosition.rideId().toString(), inputUpdatePosition.latitude(), inputUpdatePosition.longitude());
+        final var position = Position.create(inputUpdatePosition.rideId().toString(), inputUpdatePosition.latitude(), inputUpdatePosition.longitude(), inputUpdatePosition.dateTime());
         positionRepository.savePosition(position);
     }
 }

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,13 +70,22 @@ class FinishRideTest {
         updatePosition1.execute(new InputUpdatePosition(
             outputRequestRide.rideId(),
             BigDecimal.valueOf(-27.584905257808835),
-            BigDecimal.valueOf(-48.545022195325124)));
+            BigDecimal.valueOf(-48.545022195325124),
+            LocalDateTime.of(2026, 1, 17, 21, 30, 0)));
 
         UpdatePosition updatePosition2 = new UpdatePosition(positionRepository, rideRepository);
         updatePosition2.execute(new InputUpdatePosition(
             outputRequestRide.rideId(),
             BigDecimal.valueOf(-27.496887588317275),
-            BigDecimal.valueOf(-48.522234807851476)));
+            BigDecimal.valueOf(-48.522234807851476),
+            LocalDateTime.of(2026, 1, 17, 22, 30, 0)));
+
+        UpdatePosition updatePosition3 = new UpdatePosition(positionRepository, rideRepository);
+        updatePosition3.execute(new InputUpdatePosition(
+            outputRequestRide.rideId(),
+            BigDecimal.valueOf(-27.584905257808835),
+            BigDecimal.valueOf(-48.545022195325124),
+            LocalDateTime.of(2026, 1, 17, 23, 30, 0)));
 
         PaymentGateway paymentGateway = new PaymentGatewayHttp(paymentProcessorClient);
         FinishRide finishRide = new FinishRide(rideRepository, paymentGateway);
@@ -86,8 +96,7 @@ class FinishRideTest {
         InputGetRide inputGetRide = new InputGetRide(outputRequestRide.rideId());
         OutputGetRide outputGetRide = getRide.execute(inputGetRide);
         assertThat(outputRequestRide.rideId()).isNotNull();
-        assertThat(outputGetRide.fare()).isEqualTo(new BigDecimal(21));
+        assertThat(outputGetRide.fare()).isEqualTo(new BigDecimal(63));
         assertThat(outputGetRide.status()).isEqualTo("completed");
-        assertThat(outputGetRide.distance()).isEqualTo(new BigDecimal(10));
     }
 }

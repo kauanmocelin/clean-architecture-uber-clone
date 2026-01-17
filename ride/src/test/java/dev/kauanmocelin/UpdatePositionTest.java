@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,13 +64,15 @@ class UpdatePositionTest {
         updatePosition1.execute(new InputUpdatePosition(
             outputRequestRide.rideId(),
             BigDecimal.valueOf(-27.584905257808835),
-            BigDecimal.valueOf(-48.545022195325124)));
+            BigDecimal.valueOf(-48.545022195325124),
+            LocalDateTime.of(2026, 1, 17, 23, 30, 0)));
 
         UpdatePosition updatePosition2 = new UpdatePosition(positionRepository, rideRepository);
         updatePosition2.execute(new InputUpdatePosition(
             outputRequestRide.rideId(),
             BigDecimal.valueOf(-27.496887588317275),
-            BigDecimal.valueOf(-48.522234807851476)));
+            BigDecimal.valueOf(-48.522234807851476),
+            LocalDateTime.of(2026, 1, 17, 23, 30, 0)));
 
         GetRide getRide = new GetRide(accountRepository, rideRepository, positionRepository);
         InputGetRide inputGetRide = new InputGetRide(outputRequestRide.rideId());
