@@ -1,18 +1,14 @@
 # Uber Clone
-Clean Architecture with Quarkus
 
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/kauanmocelin/uber-clone/blob/main/LICENSE)
-
-# About
-
+## Overview
 This is an implementation of Clean Architecture with quarkus as objective to learn more about software architecture by hands on.
 With this architecture all layers was tested independently and easily, an elegance way to accomplish uncoupling of code.
 
-# Architectural Diagram
+## Architectural Diagram
 
 ![Hexagonal Architecture Diagram](clean-architecture.jpg)
 
-# Built With
+## Built With
 
 - Java 17
 - [Quarkus](https://quarkus.io/)
@@ -43,3 +39,14 @@ If you want to build an _uber-jar_, execute the following command:
 ```
 
 The application, packaged as an _uber-jar_, is now runnable using `java -jar target/*-runner.jar`.
+
+## Contributing
+Contributions are welcome. If you have suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
+
+## Author
+**Kauan Mocelin**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kauanmocelin/)
